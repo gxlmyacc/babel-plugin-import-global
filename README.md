@@ -3,7 +3,7 @@ a babel plugin that transfrom import vars to global vars
 
 ## installtion
 
-```base
+```bash
   npm install --save-dev babel-plugin-import-global
   // or 
   yarn add -D babel-plugin-import-global
