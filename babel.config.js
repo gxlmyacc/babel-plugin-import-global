@@ -18,9 +18,10 @@ module.exports = {
       path.resolve('./src/index.js'),
       {
         globals: {
+          antd: 'antd',
           react: 'React',
           'react-dom': 'ReactDOM'
-        }
+        },
       }
     ],
     '@babel/plugin-syntax-jsx',

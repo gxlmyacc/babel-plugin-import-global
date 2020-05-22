@@ -1,8 +1,8 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import {
+const React = require('react').default;
+const ReactDOM = require('react-dom').default;
+const {
   Row, Col, DatePicker, Input, Select, message, Modal, Table, Radio,
-} from 'antd';
+} = require('antd').default;
 
 const { Option } = Select;
 
