@@ -40,8 +40,8 @@ module.exports = function (babel) {
     } = opts;
 
     let str = globalName;
-    if (namespace) str = `${str}.${namespace}`;
-    if (globalVar) str = `${str}.${globalVar}`;
+    if (namespace) str = namespace.includes('-') ? `${str}["${namespace}"]` : `${str}.${namespace}`;
+    if (globalVar) str = globalVar.includes('-') ? `${str}["${globalVar}"]` : `${str}.${globalVar}`;
     return template(str)().expression;
   }
 
@@ -51,7 +51,8 @@ module.exports = function (babel) {
       ImportDeclaration(path, state) {
         let { node } = path;
         const { 
-          namespace 
+          namespace,
+          varKind = 'const'
         } = state.opts;
 
         let src = node.source.value;
@@ -67,7 +68,7 @@ module.exports = function (babel) {
         ) {
           let identifier = node.specifiers[0].local.name;
           path.replaceWith(
-            t.variableDeclaration('const', [
+            t.variableDeclaration(varKind, [
               t.variableDeclarator(t.identifier(identifier), expr)
             ])
           );
@@ -75,28 +76,28 @@ module.exports = function (babel) {
           node.specifiers.forEach(({ type, imported, local }) => {
             if (type === 'ImportDefaultSpecifier') {
               path.insertBefore(
-                t.variableDeclaration('const', [
+                t.variableDeclaration(varKind, [
                   t.variableDeclarator(t.identifier(local.name), expr)
                 ])
               );
               path.getSibling(path.key - 1).stop();
             } else if (imported.name === 'default') {
               path.insertBefore(
-                t.variableDeclaration('const', [
+                t.variableDeclaration(varKind, [
                   t.variableDeclarator(t.identifier(local.name), expr)
                 ])
               );
               path.getSibling(path.key - 1).stop();
             } else if (src === namespace) {
               path.insertBefore(
-                t.variableDeclaration('const', [
+                t.variableDeclaration(varKind, [
                   t.variableDeclarator(t.identifier(local.name), expr)
                 ])
               );
               path.getSibling(path.key - 1).stop();
             } else {
               path.insertBefore(
-                t.variableDeclaration('const', [
+                t.variableDeclaration(varKind, [
                   t.variableDeclarator(
                     t.identifier(local.name),
                     template(`$EXPR$.${imported.name}`)({ $EXPR$: expr }).expression
@@ -118,7 +119,7 @@ module.exports = function (babel) {
          || !t.isStringLiteral(node.arguments[0])) return;
 
         let src = node.arguments[0].value;
-        let globalVar = getGlobalVar(path, src, state.opts) || {};
+        let globalVar = getGlobalVar(path, src, state.opts);
         if (!globalVar) return;
 
         path.replaceWith(getExpr(globalVar, state.opts));

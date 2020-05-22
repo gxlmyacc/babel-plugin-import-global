@@ -1,8 +1,12 @@
 const React = require('react').default;
 const ReactDOM = require('react-dom').default;
 const {
-  Row, Col, DatePicker, Input, Select, message, Modal, Table, Radio,
+  Select, DatePicker
 } = require('antd').default;
+
+const {
+  Row, Col, Input, message, Modal, Table, Radio,
+} = require('antd-plus').default;
 
 const { Option } = Select;
 

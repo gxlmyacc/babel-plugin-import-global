@@ -20,7 +20,8 @@ module.exports = {
         globals: {
           antd: 'antd',
           react: 'React',
-          'react-dom': 'ReactDOM'
+          'react-dom': 'ReactDOM',
+          'antd-plus': 'antd-plus'
         },
       }
     ],

@@ -5,18 +5,19 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.test1 = test1;
 exports.default = void 0;
-const React = window.haha.React.default;
-const ReactDOM = window.haha.ReactDOM.default;
-const _require$default = window.haha.antd.default,
-      Row = _require$default.Row,
-      Col = _require$default.Col,
-      DatePicker = _require$default.DatePicker,
-      Input = _require$default.Input,
+const React = window.React.default;
+const ReactDOM = window.ReactDOM.default;
+const _require$default = window.antd.default,
       Select = _require$default.Select,
-      message = _require$default.message,
-      Modal = _require$default.Modal,
-      Table = _require$default.Table,
-      Radio = _require$default.Radio;
+      DatePicker = _require$default.DatePicker;
+const _require$default2 = window["antd-plus"].default,
+      Row = _require$default2.Row,
+      Col = _require$default2.Col,
+      Input = _require$default2.Input,
+      message = _require$default2.message,
+      Modal = _require$default2.Modal,
+      Table = _require$default2.Table,
+      Radio = _require$default2.Radio;
 const Option = Select.Option;
 
 class Test extends React.Component {
