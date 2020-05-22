@@ -1,11 +1,12 @@
 {
   "name": "babel-plugin-import-global",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "a babel plugin that transform import to global vars",
   "keywords": [
     "babel",
     "plugin",
-    "provide"
+    "import",
+    "global"
   ],
   "sideEffects": false,
   "main": "esm/index.js",
@@ -23,7 +24,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gxlmyacc/babel-plugin-provide.git"
+    "url": "git+https://github.com/gxlmyacc/babel-plugin-import-global.git"
   },
   "author": "gxlmyacc",
   "dependencies": {

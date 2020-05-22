@@ -23,6 +23,10 @@ module.exports = {
           'react-dom': 'ReactDOM',
           'antd-plus': 'antd-plus'
         },
+        exclude: [
+          'antd-plus',
+          'antd.css'
+        ]
       }
     ],
     '@babel/plugin-syntax-jsx',

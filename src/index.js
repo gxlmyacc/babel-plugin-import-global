@@ -1,5 +1,6 @@
 
 const GLOBAL_NAME = 'window';
+const VAR_KIND = 'var';
 
 function isFunction(v) {
   return typeof v === 'function';
@@ -8,13 +9,13 @@ function isFunction(v) {
 module.exports = function (babel) {
   const { types: t, template } = babel;
 
-  function getGlobalVar(path, src, opts) {
+  function getGlobalVar(path, src, opts, isRequire) {
     const { 
       globals = {}, 
-      exclude = [],
+      removes = [],
     } = opts;
 
-    if (exclude.some(v => {
+    if (removes.some(v => {
       let matched 
         = v instanceof RegExp 
           ? v.test(src) 
@@ -23,7 +24,11 @@ module.exports = function (babel) {
             : (v === src);
 
       if (!matched) return;
-      path.remove();
+      if (isRequire && !t.isExpressionStatement(path.parent)) {
+        path.replaceWith(t.objectExpression([]));
+      } else if (t.isImportDeclaration(path.node) && path.node.specifiers.length) {
+        transformExpr(path, src, t.objectExpression([]), opts);
+      } else path.remove();
       return true;
     })) return;
 
@@ -45,70 +50,75 @@ module.exports = function (babel) {
     return template(str)().expression;
   }
 
+  function transformExpr(path, src, expr, opts) {
+    const { 
+      namespace,
+      varKind = VAR_KIND
+    } = opts;
+    const { node } = path;
+
+    if (node.specifiers.length === 1
+      && (node.specifiers[0].type === 'ImportDefaultSpecifier'
+        || node.specifiers[0].type === 'ImportNamespaceSpecifier')
+    ) {
+      let identifier = node.specifiers[0].local.name;
+      path.replaceWith(
+        t.variableDeclaration(varKind, [
+          t.variableDeclarator(t.identifier(identifier), expr)
+        ])
+      );
+    } else if (node.specifiers) {
+      node.specifiers.forEach(({ type, imported, local }) => {
+        if (type === 'ImportDefaultSpecifier') {
+          path.insertBefore(
+            t.variableDeclaration(varKind, [
+              t.variableDeclarator(t.identifier(local.name), expr)
+            ])
+          );
+          path.getSibling(path.key - 1).stop();
+        } else if (imported.name === 'default') {
+          path.insertBefore(
+            t.variableDeclaration(varKind, [
+              t.variableDeclarator(t.identifier(local.name), expr)
+            ])
+          );
+          path.getSibling(path.key - 1).stop();
+        } else if (src === namespace) {
+          path.insertBefore(
+            t.variableDeclaration(varKind, [
+              t.variableDeclarator(t.identifier(local.name), expr)
+            ])
+          );
+          path.getSibling(path.key - 1).stop();
+        } else {
+          path.insertBefore(
+            t.variableDeclaration(varKind, [
+              t.variableDeclarator(
+                t.identifier(local.name),
+                template(`$EXPR$.${imported.name}`)({ $EXPR$: expr }).expression
+              )
+            ])
+          );
+          path.getSibling(path.key - 1).stop();
+        }
+      });
+      path.remove();
+    }
+  }
+
   return {
     name: 'babel-plugin-import-global',
     visitor: {
       ImportDeclaration(path, state) {
         let { node } = path;
-        const { 
-          namespace,
-          varKind = 'const'
-        } = state.opts;
+        const { namespace, } = state.opts;
 
         let src = node.source.value;
         let globalVar = getGlobalVar(path, src, state.opts);
 
         if (src !== namespace && !globalVar) return;
 
-        let expr = getExpr(globalVar, state.opts);
-
-        if (node.specifiers.length === 1
-          && (node.specifiers[0].type === 'ImportDefaultSpecifier'
-            || node.specifiers[0].type === 'ImportNamespaceSpecifier')
-        ) {
-          let identifier = node.specifiers[0].local.name;
-          path.replaceWith(
-            t.variableDeclaration(varKind, [
-              t.variableDeclarator(t.identifier(identifier), expr)
-            ])
-          );
-        } else if (node.specifiers) {
-          node.specifiers.forEach(({ type, imported, local }) => {
-            if (type === 'ImportDefaultSpecifier') {
-              path.insertBefore(
-                t.variableDeclaration(varKind, [
-                  t.variableDeclarator(t.identifier(local.name), expr)
-                ])
-              );
-              path.getSibling(path.key - 1).stop();
-            } else if (imported.name === 'default') {
-              path.insertBefore(
-                t.variableDeclaration(varKind, [
-                  t.variableDeclarator(t.identifier(local.name), expr)
-                ])
-              );
-              path.getSibling(path.key - 1).stop();
-            } else if (src === namespace) {
-              path.insertBefore(
-                t.variableDeclaration(varKind, [
-                  t.variableDeclarator(t.identifier(local.name), expr)
-                ])
-              );
-              path.getSibling(path.key - 1).stop();
-            } else {
-              path.insertBefore(
-                t.variableDeclaration(varKind, [
-                  t.variableDeclarator(
-                    t.identifier(local.name),
-                    template(`$EXPR$.${imported.name}`)({ $EXPR$: expr }).expression
-                  )
-                ])
-              );
-              path.getSibling(path.key - 1).stop();
-            }
-          });
-          path.remove();
-        }
+        transformExpr(path, src, getExpr(globalVar, state.opts), state.opts);
       },
       CallExpression(path, state) {
         let { node } = path;
@@ -119,7 +129,7 @@ module.exports = function (babel) {
          || !t.isStringLiteral(node.arguments[0])) return;
 
         let src = node.arguments[0].value;
-        let globalVar = getGlobalVar(path, src, state.opts);
+        let globalVar = getGlobalVar(path, src, state.opts, true);
         if (!globalVar) return;
 
         path.replaceWith(getExpr(globalVar, state.opts));

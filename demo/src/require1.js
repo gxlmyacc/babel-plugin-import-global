@@ -8,6 +8,14 @@ const {
   Row, Col, Input, message, Modal, Table, Radio,
 } = require('antd-plus').default;
 
+const { Test1 } = require('antd-plus');
+
+let Test2;
+
+Test2 = require('antd-plus');
+
+require('antd.css');
+
 const { Option } = Select;
 
 class Test extends React.Component {

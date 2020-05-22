@@ -4,6 +4,12 @@ import {
   Row, Col, DatePicker, Input, Select, message, Modal, Table, Radio,
 } from 'antd';
 
+import {
+  Test1
+} from 'antd-plus';
+
+import 'antd.css';
+
 const { Option } = Select;
 
 class Test extends React.Component {

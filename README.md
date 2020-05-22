@@ -87,3 +87,45 @@ var _default = Test;
 exports.default = _default;
 ```
 
+## options
+
+- `globals` that will transform to global vars. demo:
+
+```js
+{
+  globals: {
+    antd: 'antd'
+  }
+}
+```
+or
+```js
+{
+  globals(src) {
+    const map = {
+      antd: 'antd'
+    };
+    return map[src];
+  }
+}
+```
+
+- `removes` that will be removed from code. demo:
+```js
+{
+  removes: [
+    'antd',
+    /some\.css$/,
+    function(src) {
+      return src === 'antd';
+    }
+  ]
+}
+```
+
+- `namespace` that will transfrom to `window.namespace.varName` if provided.
+
+- `global` default is `window`.
+
+- `varKind` default is `var`.
+

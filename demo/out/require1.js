@@ -5,20 +5,19 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.test1 = test1;
 exports.default = void 0;
-const React = window.React.default;
-const ReactDOM = window.ReactDOM.default;
-const _require$default = window.antd.default,
-      Select = _require$default.Select,
-      DatePicker = _require$default.DatePicker;
-const _require$default2 = window["antd-plus"].default,
-      Row = _require$default2.Row,
-      Col = _require$default2.Col,
-      Input = _require$default2.Input,
-      message = _require$default2.message,
-      Modal = _require$default2.Modal,
-      Table = _require$default2.Table,
-      Radio = _require$default2.Radio;
-const Option = Select.Option;
+// const React = require('react').default;
+// const ReactDOM = require('react-dom').default;
+// const {
+//   Select, DatePicker
+// } = require('antd').default;
+// const {
+//   Row, Col, Input, message, Modal, Table, Radio,
+// } = require('antd-plus').default;
+// const { Test1 } = require('antd-plus');
+// let Test2;
+// Test2 = require('antd-plus');
+const _Select = Select,
+      Option = _Select.Option;
 
 class Test extends React.Component {
   render() {
