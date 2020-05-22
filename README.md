@@ -66,8 +66,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.test1 = test1;
 exports.default = void 0;
-const React = window.React;
-const ReactDOM = window.ReactDOM;
+var React = window.React;
+var ReactDOM = window.ReactDOM;
 
 class Test extends React.Component {
   render() {
