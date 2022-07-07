@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-import-global",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "a babel plugin that transform import to global vars",
   "keywords": [
     "babel",
@@ -29,8 +29,7 @@
   "author": "gxlmyacc",
   "dependencies": {
   },
-  "peerDependencies": {
-  },
+  "peerDependencies": {},
   "devDependencies": {
     "@babel/cli": "^7.2.3",
     "@babel/core": "^7.5.4",
@@ -53,6 +52,7 @@
     "@babel/preset-env": "7.4.5",
     "@babel/preset-react": "^7.0.0",
     "babel-eslint": "^10.0.2",
+    "camelcase": "^5.3.1",
     "cross-env": "^5.2.0",
     "eslint": "^6.0.1",
     "eslint-config-airbnb-base": "^13.2.0",

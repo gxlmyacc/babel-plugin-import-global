@@ -1,4 +1,5 @@
-const path = require('path');
+// const camelCase =  require('camelcase');
+// const path = require('path');
 
 module.exports = {
   presets: [
@@ -8,27 +9,31 @@ module.exports = {
         modules: 'commonjs',
         useBuiltIns: 'entry',
         corejs: 2,
-        targets: { browsers: ['Chrome >= 49'] }
+        targets: { browsers: ['Chrome >= 31'] }
       }
     ],
     '@babel/preset-react',
   ],
   plugins: [
-    [
-      path.resolve('./src/index.js'),
-      {
-        globals: {
-          antd: 'antd',
-          react: 'React',
-          'react-dom': 'ReactDOM',
-          'antd-plus': 'antd-plus'
-        },
-        exclude: [
-          'antd-plus',
-          'antd.css'
-        ]
-      }
-    ],
+    // [
+    //   path.resolve('./src/index.js'),
+    //   {
+    //     globals: {
+    //       react: 'React',
+    //       'react-dom': 'ReactDOM'
+    //     },
+    //     removes: [
+    //       'antd.css'
+    //     ],
+    //     redirects: [
+    //       {
+    //         from: /^antd\/npm\/components\/([^/]+)$/,
+    //         to: 'antd',
+    //         imported: (src, matched) => camelCase(matched[1], { pascalCase: true })
+    //       }
+    //     ]
+    //   }
+    // ],
     '@babel/plugin-syntax-jsx',
     ['@babel/plugin-proposal-decorators', { legacy: true }],
     '@babel/plugin-proposal-class-properties',

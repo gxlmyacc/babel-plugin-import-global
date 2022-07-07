@@ -1,5 +1,9 @@
 # babel-plugin-import-global
-a babel plugin that transfrom import vars to global vars
+
+a babel plugin that suppport:
+  1. transfrom import vars to global vars
+  2. remove some import statements;
+  3. redirect some import statements;
 
 ## installtion
 
@@ -13,6 +17,7 @@ a babel plugin that transfrom import vars to global vars
 
 
 ```js
+const camelCase =  require('camelcase');
 // babel.config.js
 module.exports = {
   presets: [
@@ -23,9 +28,20 @@ module.exports = {
       'babel-plugin-import-global',
       {
         globals: {
+          antd: 'antd',
           react: 'React',
           'react-dom': 'ReactDOM'
-        }
+        },
+        removes: [
+          'antd.css'
+        ],
+        redirects: [
+          {
+            from: /^antd-plus\/npm\/components\/([^/]+)$/,
+            to: 'antd-plus',
+            imported: (src, matched) => camelCase(matched[1], { pascalCase: true })
+          }
+        ]
       }
     ],
    ...
@@ -38,11 +54,27 @@ module.exports = {
 ```js
 import React from "react";
 import ReactDOM from "react-dom";
+import { Search } from 'antd/npm/components/input';
+import Button from 'antd/npm/components/button';
+import Input from 'antd/npm/components/input';
 
-class Test extends React.Component {
-  render() {
-    return <div>dd</div>
-  }
+import 'antd.css';
+
+const Select = require('antd/npm/components/select')
+
+const { Option } = Select;
+
+function Test() {
+  return (
+    <>
+    <Select>
+      <Option>dd</Option>
+    </Select>
+    <Input />
+    <Search />
+    <Button>test</Button>
+    </>
+  )
 }
 
 
@@ -55,6 +87,7 @@ export {
 }
 
 export default Test;
+
 ```
 
 will transform to:
@@ -65,18 +98,34 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.test1 = test1;
-exports.default = void 0;
+exports["default"] = void 0;
+
+var _antd = require("antd");
+
 var React = window.React;
 var ReactDOM = window.ReactDOM;
 
-class Test extends React.Component {
-  render() {
-    return (
-      /*#__PURE__*/
-      React.createElement("div", null, "dd")
-    );
-  }
+var Search = require("antd").Input.Search;
 
+var Select = require("antd").Select;
+
+var Option = Select.Option;
+
+function Test() {
+  return (
+    /*#__PURE__*/
+    React.createElement(React.Fragment, null,
+    /*#__PURE__*/
+    React.createElement(Select, null,
+    /*#__PURE__*/
+    React.createElement(Option, null, "dd")),
+    /*#__PURE__*/
+    React.createElement(_antd.Input, null),
+    /*#__PURE__*/
+    React.createElement(Search, null),
+    /*#__PURE__*/
+    React.createElement(_antd.Button, null, "test"))
+  );
 }
 
 function test1() {
@@ -84,7 +133,7 @@ function test1() {
 }
 
 var _default = Test;
-exports.default = _default;
+exports["default"] = _default;
 ```
 
 ## options
@@ -123,9 +172,27 @@ or
 }
 ```
 
+- `redirects` that will redirect the import source. demo:
+```js
+{
+  redirects: [
+    {
+      // string or Regexp
+      from: /^antd\/npm\/components\/([^/]+)$/,
+      // string or string.repalce`s function 
+      to: 'antd',
+      // custom imported handler, optional
+      imported: (src, matched) => camelCase(matched[1], { pascalCase: true })
+    }
+  ]
+}
+```
+
 - `namespace` that will transfrom to `window.namespace.varName` if provided.
 
 - `global` default is `window`.
 
 - `varKind` default is `var`.
+
+
 
