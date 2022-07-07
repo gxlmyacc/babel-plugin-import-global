@@ -1,5 +1,5 @@
-// const camelCase =  require('camelcase');
-// const path = require('path');
+const camelCase =  require('camelcase');
+const path = require('path');
 
 module.exports = {
   presets: [

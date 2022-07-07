@@ -211,15 +211,31 @@ module.exports = function (babel) {
     name: 'babel-plugin-import-global',
     visitor: {
       ImportDeclaration(path, state) {
+        let { filename, opts = {} } = state;
         let { node } = path;
 
+        if ((opts.excludes || []).some(exclude => exclude.test(filename))) {
+          return;
+        }
+        if (opts.includes && opts.includes.length && !opts.includes.some(include => include.test(filename))) {
+          return;
+        }
+
         let src = node.source.value;
-        if (walkRemoves(path, src, state.opts)) return;
-        if (walkRedirects(path, src, state.opts)) return;
-        walkGlobals(path, src, state.opts);
+        if (walkRemoves(path, src, opts)) return;
+        walkRedirects(path, src, opts);
+        walkGlobals(path, src, opts);
       },
       CallExpression(path, state) {
+        let { filename, opts = {} } = state;
         let { node } = path;
+
+        if ((opts.excludes || []).some(exclude => exclude.test(filename))) {
+          return;
+        }
+        if (opts.includes && opts.includes.length && !opts.includes.some(include => include.test(filename))) {
+          return;
+        }
 
         if (!t.isIdentifier(node.callee)
          || node.callee.name !== 'require'
@@ -227,9 +243,9 @@ module.exports = function (babel) {
          || !t.isStringLiteral(node.arguments[0])) return;
 
         let src = node.arguments[0].value;
-        if (walkRemoves(path, src, state.opts, true)) return;
-        if (walkRedirects(path, src, state.opts, true)) return;
-        walkGlobals(path, src, state.opts, true);
+        if (walkRemoves(path, src, opts, true)) return;
+        walkRedirects(path, src, opts, true);
+        walkGlobals(path, src, opts, true);
       }
     }
   };

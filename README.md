@@ -194,5 +194,9 @@ or
 
 - `varKind` default is `var`.
 
+- `includes` includes files RegExp list.
+
+- `excludes` excludes files RegExp list.
+
 
 
