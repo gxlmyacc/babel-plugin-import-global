@@ -196,7 +196,7 @@ module.exports = function (babel) {
             t.variableDeclaration(varKind, [
               t.variableDeclarator(
                 t.identifier(local.name),
-                template(`$EXPR$.${imported.name}`)({ $EXPR$: expr }).expression
+                template(`%%EXPR%%.${imported.name}`)({ "EXPR": expr }).expression
               )
             ])
           );
