@@ -4,17 +4,13 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.test1 = test1;
-exports["default"] = void 0;
-
-var _antd = require("antd");
-
+exports.default = void 0;
 var React = window.React;
 var ReactDOM = window.ReactDOM;
-
-var Search = require("antd").Input.Search;
-
-var Select = require("antd").Select;
-
+var Search = window.Antd.Input.Search;
+var Button = window.Antd.Button;
+var Input = window.Antd.Input;
+var Select = window.Antd.Select;
 var Option = Select.Option;
 
 function Test() {
@@ -26,11 +22,11 @@ function Test() {
     /*#__PURE__*/
     React.createElement(Option, null, "dd")),
     /*#__PURE__*/
-    React.createElement(_antd.Input, null),
+    React.createElement(Input, null),
     /*#__PURE__*/
     React.createElement(Search, null),
     /*#__PURE__*/
-    React.createElement(_antd.Button, null, "test"))
+    React.createElement(Button, null, "test"))
   );
 }
 
@@ -39,4 +35,4 @@ function test1() {
 }
 
 var _default = Test;
-exports["default"] = _default;
+exports.default = _default;

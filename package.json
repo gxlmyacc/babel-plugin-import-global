@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-import-global",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "a babel plugin that transform import to global vars",
   "keywords": [
     "babel",

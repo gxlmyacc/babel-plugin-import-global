@@ -1,5 +1,5 @@
-// const camelCase =  require('camelcase');
-// const path = require('path');
+const camelCase =  require('camelcase');
+const path = require('path');
 
 module.exports = {
   presets: [
@@ -20,7 +20,9 @@ module.exports = {
     //   {
     //     globals: {
     //       react: 'React',
-    //       'react-dom': 'ReactDOM'
+    //       'react-dom': 'ReactDOM',
+    //       jquery: '$',
+    //       // antd: 'Antd',
     //     },
     //     removes: [
     //       'antd.css'

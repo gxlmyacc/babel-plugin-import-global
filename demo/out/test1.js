@@ -5,30 +5,67 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.test1 = test1;
 exports.default = void 0;
+
+var _antdPlus = require("antd-plus");
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
 var React = window.React;
 var ReactDOM = window.ReactDOM;
-var Row = window.antd.Row;
-var Col = window.antd.Col;
-var DatePicker = window.antd.DatePicker;
-var Input = window.antd.Input;
-var Select = window.antd.Select;
-var message = window.antd.message;
-var Modal = window.antd.Modal;
-var Table = window.antd.Table;
-var Radio = window.antd.Radio;
-var Test1 = {}.Test1;
-const _Select = Select,
-      Option = _Select.Option;
+var Row = window.Antd.Row;
+var Col = window.Antd.Col;
+var DatePicker = window.Antd.DatePicker;
+var Input = window.Antd.Input;
+var Select = window.Antd.Select;
+var message = window.Antd.message;
+var Modal = window.Antd.Modal;
+var Table = window.Antd.Table;
+var Radio = window.Antd.Radio;
+var $ = window.$.$;
+var _Select = Select,
+    Option = _Select.Option;
 
-class Test extends React.Component {
-  render() {
-    return (
-      /*#__PURE__*/
-      React.createElement(Option, null, "dd")
-    );
+var Test =
+/*#__PURE__*/
+function (_React$Component) {
+  _inherits(Test, _React$Component);
+
+  function Test() {
+    _classCallCheck(this, Test);
+
+    return _possibleConstructorReturn(this, _getPrototypeOf(Test).apply(this, arguments));
   }
 
-}
+  _createClass(Test, [{
+    key: "render",
+    value: function render() {
+      return (
+        /*#__PURE__*/
+        React.createElement(Option, null, "dd")
+      );
+    }
+  }]);
+
+  return Test;
+}(React.Component);
+
+$.log('dddd');
 
 function test1() {
   ReactDOM.render(Test, document.getElementById('root'));

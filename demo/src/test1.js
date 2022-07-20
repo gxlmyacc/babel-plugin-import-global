@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import {
   Row, Col, DatePicker, Input, Select, message, Modal, Table, Radio,
 } from 'antd';
+import { $ } from 'jquery';
 
 import {
   Test1
@@ -17,6 +18,8 @@ class Test extends React.Component {
     return <Option>dd</Option>
   }
 }
+
+$.log('dddd');
 
 
 function test1() {

@@ -23,7 +23,7 @@ module.exports = function (babel) {
     let str = globalName;
     if (namespace) str = /[@/-]/.test(namespace) ? `${str}["${namespace}"]` : `${str}.${namespace}`;
     if (globalVar) str = /[@/-]/.test(globalVar) ? `${str}["${globalVar}"]` : `${str}.${globalVar}`;
-    return template(str)().expression;
+    return template(str, { syntacticPlaceholders: true })().expression;
   }
 
   function walkRemoves(path, src, opts, isRequire) {
@@ -76,7 +76,7 @@ module.exports = function (babel) {
 
       let toExpr = t.stringLiteral(to);
       if (isRequire) {
-        path.node.arguments[0] = toExpr;
+        path.get('arguments.0').replaceWith(toExpr);
         if (imported) {
           path.replaceWith(t.memberExpression(path.node, t.identifier(imported)));
         }
@@ -84,7 +84,7 @@ module.exports = function (babel) {
       }
       let node = path.node;
       if (!imported) {
-        node.source = toExpr;
+        path.get('source').replaceWith(toExpr);
         return true;
       }
       if (node.specifiers.length === 1
@@ -104,24 +104,24 @@ module.exports = function (babel) {
                 t.variableDeclarator(t.identifier(local.name), t.memberExpression(toExpr, local))
               ])
             );
-            path.getSibling(path.key - 1).stop();
+            // path.getSibling(path.key - 1).stop();
           } else if (imported.name === 'default') {
             path.insertBefore(
               t.variableDeclaration(varKind, [
                 t.variableDeclarator(t.identifier(local.name), t.memberExpression(toExpr, local))
               ])
             );
-            path.getSibling(path.key - 1).stop();
+            // path.getSibling(path.key - 1).stop();
           } else {
             path.insertBefore(
               t.variableDeclaration(varKind, [
                 t.variableDeclarator(
                   t.identifier(local.name),
-                  template(`$EXPR$.${imported.name}`)({ $EXPR$: toExpr }).expression
+                  template(`%%EXPR%%.${imported.name}`, { syntacticPlaceholders: true })({ EXPR: toExpr }).expression
                 )
               ])
             );
-            path.getSibling(path.key - 1).stop();
+            // path.getSibling(path.key - 1).stop();
           }
         });
         path.remove();
@@ -176,31 +176,31 @@ module.exports = function (babel) {
               t.variableDeclarator(t.identifier(local.name), expr)
             ])
           );
-          path.getSibling(path.key - 1).stop();
+          // path.getSibling(path.key - 1).stop();
         } else if (imported.name === 'default') {
           path.insertBefore(
             t.variableDeclaration(varKind, [
               t.variableDeclarator(t.identifier(local.name), expr)
             ])
           );
-          path.getSibling(path.key - 1).stop();
+          // path.getSibling(path.key - 1).stop();
         } else if (src === namespace) {
           path.insertBefore(
             t.variableDeclaration(varKind, [
               t.variableDeclarator(t.identifier(local.name), expr)
             ])
           );
-          path.getSibling(path.key - 1).stop();
+          // path.getSibling(path.key - 1).stop();
         } else {
           path.insertBefore(
             t.variableDeclaration(varKind, [
               t.variableDeclarator(
                 t.identifier(local.name),
-                template(`%%EXPR%%.${imported.name}`)({ "EXPR": expr }).expression
+                template(`%%EXPR%%.${imported.name}`, { syntacticPlaceholders: true })({ EXPR: expr }).expression
               )
             ])
           );
-          path.getSibling(path.key - 1).stop();
+          // path.getSibling(path.key - 1).stop();
         }
       });
       path.remove();
@@ -223,7 +223,7 @@ module.exports = function (babel) {
 
         let src = node.source.value;
         if (walkRemoves(path, src, opts)) return;
-        walkRedirects(path, src, opts);
+        if (walkRedirects(path, src, opts)) return;
         walkGlobals(path, src, opts);
       },
       CallExpression(path, state) {
@@ -244,7 +244,7 @@ module.exports = function (babel) {
 
         let src = node.arguments[0].value;
         if (walkRemoves(path, src, opts, true)) return;
-        walkRedirects(path, src, opts, true);
+        if (walkRedirects(path, src, opts, true)) return;
         walkGlobals(path, src, opts, true);
       }
     }
