@@ -1,7 +1,7 @@
 # babel-plugin-import-global
 
 a babel plugin that suppport:
-  1. transfrom import vars to global vars
+  1. transfrom import vars (`import xxx from 'xxx'`) to global vars (`var xxx = window.xxx`).
   2. remove some import statements;
   3. redirect some import statements;
 
@@ -41,7 +41,9 @@ module.exports = {
             to: 'antd-plus',
             imported: (src, matched) => camelCase(matched[1], { pascalCase: true })
           }
-        ]
+        ],
+        // includes: [],
+        // excludes: [/node_modules/],
       }
     ],
    ...
