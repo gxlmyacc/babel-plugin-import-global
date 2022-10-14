@@ -5,6 +5,10 @@ a babel plugin that suppport:
   2. remove some import statements;
   3. redirect some import statements;
 
+
+[![NPM version](https://img.shields.io/npm/v/babel-plugin-import-global.svg?style=flat)](https://npmjs.com/package/babel-plugin-import-global)
+[![NPM downloads](https://img.shields.io/npm/dm/babel-plugin-import-global.svg?style=flat)](https://npmjs.com/package/babel-plugin-import-global)
+
 ## installtion
 
 ```bash
